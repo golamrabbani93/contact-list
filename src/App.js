@@ -1,12 +1,25 @@
-import {Button} from '@mui/material';
-import './App.css';
+import SignIn from './components/SignIn/SignIn';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import SignUp from './components/SignUp/SignUp';
 
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <SignIn></SignIn>,
+	},
+	{
+		path: '/signin',
+		element: <SignIn></SignIn>,
+	},
+	{
+		path: '/signup',
+		element: <SignUp></SignUp>,
+	},
+]);
 function App() {
 	return (
 		<div className="App">
-			<Button variant="text">Text</Button>
-			<Button variant="contained">Contained</Button>
-			<Button variant="outlined">Outlined</Button>
+			<RouterProvider router={router}></RouterProvider>
 		</div>
 	);
 }
