@@ -3,25 +3,48 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
 const SignIn = () => {
 	const theme = createTheme();
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get('email'),
-			password: data.get('password'),
-		});
+	const navigate = useNavigate();
+	const {
+		register,
+		handleSubmit,
+		formState: {errors},
+		reset,
+	} = useForm();
+	const handleSignIn = (data) => {
+		const {email, password} = data;
+		const user = {
+			email,
+			password,
+		};
+		fetch('http://localhost:5000/signin', {
+			method: 'POST',
+			headers: {
+				'content-Type': 'application/json',
+			},
+			body: JSON.stringify(user),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.status === 'ok') {
+					alert('Sign in Successfull');
+					window.localStorage.setItem('Token', data.data);
+					navigate('/');
+				}
+				if (data.error) {
+					alert(data.error);
+				}
+				reset();
+			});
 	};
 	return (
 		<ThemeProvider theme={theme}>
@@ -57,7 +80,7 @@ const SignIn = () => {
 						<Typography component="h1" variant="h3">
 							Sign in
 						</Typography>
-						<Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 1}}>
+						<Box component="form" noValidate onSubmit={handleSubmit(handleSignIn)} sx={{mt: 1}}>
 							<TextField
 								margin="normal"
 								required
@@ -66,8 +89,11 @@ const SignIn = () => {
 								label="Email Address"
 								name="email"
 								autoComplete="email"
-								autoFocus
+								{...register('email', {
+									required: 'Please Enter Your Email',
+								})}
 							/>
+							{errors.email && <small style={{color: 'red'}}>{errors.email.message}</small>}
 							<TextField
 								margin="normal"
 								required
@@ -77,11 +103,15 @@ const SignIn = () => {
 								type="password"
 								id="password"
 								autoComplete="current-password"
+								{...register('password', {
+									required: 'Please Enter Your password',
+								})}
 							/>
-							<FormControlLabel
+							{errors.password && <small style={{color: 'red'}}>{errors.password.message}</small>}
+							{/* <FormControlLabel
 								control={<Checkbox value="remember" color="primary" />}
 								label="Remember me"
-							/>
+							/> */}
 							<Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
 								Sign In
 							</Button>

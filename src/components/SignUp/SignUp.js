@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useForm} from 'react-hook-form';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -128,7 +128,7 @@ const SignUp = () => {
 								label="Remember me"
 							/> */}
 							<Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
-								Sign In
+								Sign Up
 							</Button>
 							<Grid container>
 								<Grid item xs>
