@@ -1,7 +1,7 @@
 import React, {useState, forwardRef} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {useNavigate} from 'react-router';
-import MaterialTable from '@material-table/core';
+import MaterialTable, {MTableBodyRow} from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -40,9 +40,8 @@ const UserList = () => {
 	const navigate = useNavigate();
 	const token = window.localStorage.getItem('Token');
 	const [user, setUser] = useState();
-	console.log('🚀🚀: UserList -> user', user);
 
-	fetch('http://localhost:5000/contactlist', {
+	fetch('https://contact-list-server.vercel.app/contactlist', {
 		method: 'POST',
 		headers: {
 			'content-Type': 'application/json',
@@ -62,10 +61,16 @@ const UserList = () => {
 			}
 		});
 
-	const {data: customersData = [], isLoading} = useQuery({
+	const {
+		data: customersData = [],
+		isLoading,
+		refetch,
+	} = useQuery({
 		queryKey: [user],
 		queryFn: async () => {
-			const res = await fetch(`http://localhost:5000/customerlist?email=${user?.email}`);
+			const res = await fetch(
+				`https://contact-list-server.vercel.app/customerlist?email=${user?.email}`,
+			);
 			const data = await res.json();
 			return data;
 		},
@@ -73,7 +78,6 @@ const UserList = () => {
 	if (isLoading) {
 		return <div>Loading.............</div>;
 	}
-	console.log(customersData);
 	const columns = [
 		{
 			title: 'Name',
@@ -95,6 +99,32 @@ const UserList = () => {
 				title={'Customer Details'}
 				columns={columns}
 				data={customersData}
+				options={{actionsColumnIndex: -1, addRowPosition: 'first'}}
+				editable={{
+					onRowAdd: (newData) =>
+						new Promise((resolve, reject) => {
+							const data = {
+								...newData,
+								user_email: user.email,
+							};
+
+							//Backend call
+							fetch('https://contact-list-server.vercel.app/customerlist', {
+								method: 'POST',
+								headers: {
+									'Content-type': 'application/json',
+								},
+								body: JSON.stringify(data),
+							})
+								.then((resp) => resp.json())
+								.then((resp) => {
+									if (resp.acknowledged) {
+										refetch();
+										resolve();
+									}
+								});
+						}),
+				}}
 			></MaterialTable>
 		</div>
 	);

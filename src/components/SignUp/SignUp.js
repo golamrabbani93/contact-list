@@ -29,7 +29,7 @@ const SignUp = () => {
 			email,
 			password,
 		};
-		fetch('http://localhost:5000/signup', {
+		fetch('https://contact-list-server.vercel.app/signup', {
 			method: 'POST',
 			headers: {
 				'content-Type': 'application/json',

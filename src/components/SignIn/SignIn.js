@@ -26,7 +26,7 @@ const SignIn = () => {
 			email,
 			password,
 		};
-		fetch('http://localhost:5000/signin', {
+		fetch('https://contact-list-server.vercel.app/signin', {
 			method: 'POST',
 			headers: {
 				'content-Type': 'application/json',
