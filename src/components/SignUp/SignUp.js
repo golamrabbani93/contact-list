@@ -15,14 +15,32 @@ import {Link} from 'react-router-dom';
 const SignUp = () => {
 	const theme = createTheme();
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			name: data.get('name'),
-			email: data.get('email'),
-			password: data.get('password'),
-		});
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const formData = e.target;
+		const user = {
+			name: formData.name.value,
+			email: formData.email.value,
+			password: formData.password.value,
+		};
+		fetch('http://localhost:5000/signup', {
+			method: 'POST',
+			headers: {
+				'content-Type': 'application/json',
+			},
+			body: JSON.stringify(user),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.acknowledged) {
+					console.log('Ok');
+					formData.reset();
+					alert('Sign Up Successfull');
+				}
+				if (data.error) {
+					alert(data.error);
+				}
+			});
 	};
 	return (
 		<ThemeProvider theme={theme}>
