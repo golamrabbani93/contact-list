@@ -1,7 +1,7 @@
 import React, {useState, forwardRef} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {useNavigate} from 'react-router';
-import MaterialTable, {MTableBodyRow} from '@material-table/core';
+import MaterialTable from '@material-table/core';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
