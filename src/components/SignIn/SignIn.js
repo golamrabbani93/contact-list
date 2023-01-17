@@ -35,7 +35,7 @@ const SignIn = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				if (data.status === 'ok') {
+				if (data.status === 200) {
 					alert('Sign in Successfull');
 					window.localStorage.setItem('Token', data.data);
 					navigate('/');
