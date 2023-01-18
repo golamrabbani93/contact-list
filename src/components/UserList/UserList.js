@@ -91,7 +91,7 @@ const UserList = () => {
 	const handleDelete = () => {
 		const updatedData = selectedRows.map((row) => row._id);
 		//*Backend call
-		fetch(`http://localhost:5000/customerlist/`, {
+		fetch(`https://contact-list-server.vercel.app/customerlist/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-type': 'application/json',
@@ -132,7 +132,7 @@ const UserList = () => {
 				actions={[
 					{
 						icon: Delete,
-						tooltip: 'Delete all selected Items',
+						tooltip: 'Delete Selected Items',
 						onClick: () => handleDelete(),
 					},
 				]}
@@ -166,7 +166,7 @@ const UserList = () => {
 						new Promise((resolve, reject) => {
 							console.log(oldData._id);
 							//*Backend call
-							fetch(`http://localhost:5000/customerlist/${oldData._id}`, {
+							fetch(`https://contact-list-server.vercel.app/customerlist/${oldData._id}`, {
 								method: 'PUT',
 								headers: {
 									'Content-type': 'application/json',
