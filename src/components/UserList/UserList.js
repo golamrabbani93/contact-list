@@ -8,7 +8,7 @@ import Check from '@material-ui/icons/Check';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import FilterList from '@material-ui/icons/FilterList';
 import FirstPage from '@material-ui/icons/FirstPage';
@@ -22,7 +22,7 @@ const UserList = () => {
 		Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
 		Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
 		Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-		Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+		Delete: forwardRef((props, ref) => <Delete {...props} ref={ref} />),
 		DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
 		Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
 		Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
@@ -40,7 +40,7 @@ const UserList = () => {
 	const navigate = useNavigate();
 	const token = window.localStorage.getItem('Token');
 	const [user, setUser] = useState();
-
+	const [selectedRows, setSelectedRows] = useState([]);
 	fetch('https://contact-list-server.vercel.app/contactlist', {
 		method: 'POST',
 		headers: {
@@ -75,9 +75,14 @@ const UserList = () => {
 			return data;
 		},
 	});
+
 	if (isLoading) {
 		return <div>Loading.............</div>;
 	}
+	const handleDelete = () => {
+		const updatedData = selectedRows.map((row) => row._id);
+		console.log('🚀🚀: handleDelete -> updatedData', updatedData);
+	};
 	const columns = [
 		{
 			title: 'Name',
@@ -98,8 +103,16 @@ const UserList = () => {
 				icons={tableIcons}
 				title={'Customer Details'}
 				columns={columns}
+				onSelectionChange={(rows) => setSelectedRows(rows)}
 				data={customersData}
-				options={{actionsColumnIndex: -1, addRowPosition: 'first'}}
+				options={{actionsColumnIndex: -1, addRowPosition: 'first', selection: true}}
+				actions={[
+					{
+						icon: Delete,
+						tooltip: 'Delete all selected rows',
+						onClick: () => handleDelete(),
+					},
+				]}
 				editable={{
 					onRowAdd: (newData) =>
 						new Promise((resolve, reject) => {
