@@ -18,6 +18,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 const UserList = () => {
+	//* Material Table Icons
 	const tableIcons = {
 		Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
 		Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -38,9 +39,14 @@ const UserList = () => {
 		ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 	};
 	const navigate = useNavigate();
+	//*Get Token
 	const token = window.localStorage.getItem('Token');
+	//*set User
 	const [user, setUser] = useState();
+	//* Selected Delete Items
 	const [selectedRows, setSelectedRows] = useState([]);
+
+	//*add  Customer Data
 	fetch('https://contact-list-server.vercel.app/contactlist', {
 		method: 'POST',
 		headers: {
@@ -53,6 +59,7 @@ const UserList = () => {
 			if (data.status === 200) {
 				!user && setUser(data.data);
 			}
+			//* JWT Expires
 			if (data.data === 'forbidden access') {
 				navigate('/signin');
 			}
@@ -61,6 +68,7 @@ const UserList = () => {
 			}
 		});
 
+	//*load all customer data
 	const {
 		data: customersData = [],
 		isLoading,
@@ -79,9 +87,23 @@ const UserList = () => {
 	if (isLoading) {
 		return <div>Loading.............</div>;
 	}
+	//*delete data
 	const handleDelete = () => {
 		const updatedData = selectedRows.map((row) => row._id);
-		console.log('🚀🚀: handleDelete -> updatedData', updatedData);
+		//*Backend call
+		fetch(`http://localhost:5000/customerlist/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(updatedData),
+		})
+			.then((resp) => resp.json())
+			.then((resp) => {
+				if (resp.status === 200) {
+					refetch();
+				}
+			});
 	};
 	const columns = [
 		{
@@ -106,13 +128,15 @@ const UserList = () => {
 				onSelectionChange={(rows) => setSelectedRows(rows)}
 				data={customersData}
 				options={{actionsColumnIndex: -1, addRowPosition: 'first', selection: true}}
+				//*delete action
 				actions={[
 					{
 						icon: Delete,
-						tooltip: 'Delete all selected rows',
+						tooltip: 'Delete all selected Items',
 						onClick: () => handleDelete(),
 					},
 				]}
+				//*add new customer data
 				editable={{
 					onRowAdd: (newData) =>
 						new Promise((resolve, reject) => {
@@ -137,6 +161,7 @@ const UserList = () => {
 									}
 								});
 						}),
+					//*Update Customer Data
 					onRowUpdate: (newData, oldData) =>
 						new Promise((resolve, reject) => {
 							console.log(oldData._id);

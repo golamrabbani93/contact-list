@@ -16,12 +16,14 @@ import {Link} from 'react-router-dom';
 
 const SignUp = () => {
 	const theme = createTheme();
+	//*Get Form data
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
 		reset,
 	} = useForm();
+	//* Add Sign UP method
 	const handleSignUp = (data) => {
 		const {name, email, password} = data;
 		const user = {
@@ -29,6 +31,7 @@ const SignUp = () => {
 			email,
 			password,
 		};
+		//* Post New User server To databse
 		fetch('https://contact-list-server.vercel.app/signup', {
 			method: 'POST',
 			headers: {

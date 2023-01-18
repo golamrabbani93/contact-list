@@ -14,18 +14,22 @@ import {useForm} from 'react-hook-form';
 const SignIn = () => {
 	const theme = createTheme();
 	const navigate = useNavigate();
+
+	//*Get Form data
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
 		reset,
 	} = useForm();
+	//* Add signIn method
 	const handleSignIn = (data) => {
 		const {email, password} = data;
 		const user = {
 			email,
 			password,
 		};
+		//* Check signin User data from databse
 		fetch('https://contact-list-server.vercel.app/signin', {
 			method: 'POST',
 			headers: {
@@ -37,6 +41,7 @@ const SignIn = () => {
 			.then((data) => {
 				if (data.status === 200) {
 					alert('Sign in Successfull');
+					//*Set Token To Local Storage
 					window.localStorage.setItem('Token', data.data);
 					navigate('/');
 				}

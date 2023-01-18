@@ -3,6 +3,7 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import SignUp from './components/SignUp/SignUp';
 import UserList from './components/UserList/UserList';
 
+//* Router Start
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 		element: <SignUp></SignUp>,
 	},
 ]);
+//* Router End
 function App() {
 	return (
 		<div className="App">
