@@ -15,3 +15,13 @@ it in your browser.
 
 5. The Contact list Page where you can add new customer data,update customer data, delete single
    customer data and delete multiple customer data.
+
+## Technology Used In this React App
+
+1. Material UI\
+2. Material Table\
+3. React Router Dom\
+4. React Query\
+5. Firebase For Hosting\
+6. React Hook Form\
+7. React Hot Toast
