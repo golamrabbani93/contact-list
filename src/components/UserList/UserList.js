@@ -108,7 +108,7 @@ const UserList = () => {
 								user_email: user.email,
 							};
 
-							//Backend call
+							//*Backend call
 							fetch('https://contact-list-server.vercel.app/customerlist', {
 								method: 'POST',
 								headers: {
@@ -122,6 +122,24 @@ const UserList = () => {
 										refetch();
 										resolve();
 									}
+								});
+						}),
+					onRowUpdate: (newData, oldData) =>
+						new Promise((resolve, reject) => {
+							console.log(oldData._id);
+							//*Backend call
+							fetch(`http://localhost:5000/customerlist/${oldData._id}`, {
+								method: 'PUT',
+								headers: {
+									'Content-type': 'application/json',
+								},
+								body: JSON.stringify(newData),
+							})
+								.then((resp) => resp.json())
+								.then((resp) => {
+									console.log(resp);
+									refetch();
+									resolve();
 								});
 						}),
 				}}
