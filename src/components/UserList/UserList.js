@@ -17,6 +17,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import {toast} from 'react-hot-toast';
 const UserList = () => {
 	//* Material Table Icons
 	const tableIcons = {
@@ -45,7 +46,8 @@ const UserList = () => {
 	const [user, setUser] = useState();
 	//* Selected Delete Items
 	const [selectedRows, setSelectedRows] = useState([]);
-
+	//*set customer to api
+	const [customers, setCustomers] = useState([]);
 	//*add  Customer Data
 	fetch('https://contact-list-server.vercel.app/contactlist', {
 		method: 'POST',
@@ -69,17 +71,14 @@ const UserList = () => {
 		});
 
 	//*load all customer data
-	const {
-		data: customersData = [],
-		isLoading,
-		refetch,
-	} = useQuery({
+	const {isLoading, refetch} = useQuery({
 		queryKey: [user],
 		queryFn: async () => {
 			const res = await fetch(
 				`https://contact-list-server.vercel.app/customerlist?email=${user?.email}`,
 			);
 			const data = await res.json();
+			setCustomers(data);
 			return data;
 		},
 	});
@@ -89,7 +88,11 @@ const UserList = () => {
 	}
 	//*delete data
 	const handleDelete = () => {
+		//*get id From Selected data
 		const updatedData = selectedRows.map((row) => row._id);
+		//*show rest customer
+		const restCustomer = customers.filter((item) => !updatedData.includes(item._id));
+		setCustomers(restCustomer);
 		//*Backend call
 		fetch(`https://contact-list-server.vercel.app/customerlist/`, {
 			method: 'DELETE',
@@ -101,7 +104,14 @@ const UserList = () => {
 			.then((resp) => resp.json())
 			.then((resp) => {
 				if (resp.status === 200) {
-					refetch();
+					toast.success('Delete Successfull', {
+						style: {
+							border: '1px solid #D94A38',
+							padding: '16px',
+							color: '#D94A38',
+							fontWeight: 'bold',
+						},
+					});
 				}
 			});
 	};
@@ -126,7 +136,7 @@ const UserList = () => {
 				title={'Customer Details'}
 				columns={columns}
 				onSelectionChange={(rows) => setSelectedRows(rows)}
-				data={customersData}
+				data={customers}
 				options={{actionsColumnIndex: -1, addRowPosition: 'first', selection: true}}
 				//*delete action
 				actions={[
@@ -156,6 +166,14 @@ const UserList = () => {
 								.then((resp) => resp.json())
 								.then((resp) => {
 									if (resp.acknowledged) {
+										toast.success('Add Data  Successfull', {
+											style: {
+												border: '1px solid #D94A38',
+												padding: '16px',
+												color: '#D94A38',
+												fontWeight: 'bold',
+											},
+										});
 										refetch();
 										resolve();
 									}
@@ -175,7 +193,14 @@ const UserList = () => {
 							})
 								.then((resp) => resp.json())
 								.then((resp) => {
-									console.log(resp);
+									toast.success('Update Data Successfull', {
+										style: {
+											border: '1px solid #D94A38',
+											padding: '16px',
+											color: '#D94A38',
+											fontWeight: 'bold',
+										},
+									});
 									refetch();
 									resolve();
 								});

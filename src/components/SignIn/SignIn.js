@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {Link, useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
+import {toast} from 'react-hot-toast';
 const SignIn = () => {
 	const theme = createTheme();
 	const navigate = useNavigate();
@@ -40,13 +41,27 @@ const SignIn = () => {
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.status === 200) {
-					alert('Sign in Successfull');
+					toast.success('Sign in Successfull', {
+						style: {
+							border: '1px solid #D94A38',
+							padding: '16px',
+							color: '#D94A38',
+							fontWeight: 'bold',
+						},
+					});
 					//*Set Token To Local Storage
 					window.localStorage.setItem('Token', data.data);
 					navigate('/');
 				}
 				if (data.error) {
-					alert(data.error);
+					toast.success(`${data.error}`, {
+						style: {
+							border: '1px solid #D94A38',
+							padding: '16px',
+							color: '#D94A38',
+							fontWeight: 'bold',
+						},
+					});
 				}
 				reset();
 			});

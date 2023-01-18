@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {Link} from 'react-router-dom';
+import {toast} from 'react-hot-toast';
 
 const SignUp = () => {
 	const theme = createTheme();
@@ -42,11 +43,24 @@ const SignUp = () => {
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.acknowledged) {
-					console.log('Ok');
-					alert('Sign Up Successfull');
+					toast.success('Sign Up Successfull', {
+						style: {
+							border: '1px solid #D94A38',
+							padding: '16px',
+							color: '#D94A38',
+							fontWeight: 'bold',
+						},
+					});
 				}
 				if (data.error) {
-					alert(data.error);
+					toast.error(`${data.error}`, {
+						style: {
+							border: '1px solid #D94A38',
+							padding: '16px',
+							color: '#D94A38',
+							fontWeight: 'bold',
+						},
+					});
 				}
 				reset();
 			});
