@@ -25,3 +25,4 @@ it in your browser.
 5. Firebase For Hosting
 6. React Hook Form
 7. React Hot Toast
+8. React Spinner

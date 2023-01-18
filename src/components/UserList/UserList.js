@@ -18,6 +18,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {toast} from 'react-hot-toast';
+import Spinner from '../Spinner/Spinner';
 const UserList = () => {
 	//* Material Table Icons
 	const tableIcons = {
@@ -84,7 +85,7 @@ const UserList = () => {
 	});
 
 	if (isLoading) {
-		return <div>Loading.............</div>;
+		return <Spinner></Spinner>;
 	}
 	//*delete data
 	const handleDelete = () => {
